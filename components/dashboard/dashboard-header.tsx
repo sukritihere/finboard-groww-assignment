@@ -48,6 +48,7 @@ export default function DashboardHeader({
     createDashboard,
     deleteDashboard,
   } = useDashboardStore();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [newDashboardName, setNewDashboardName] = useState("");
   const [showNewDashboardInput, setShowNewDashboardInput] = useState(false);
@@ -126,74 +127,22 @@ export default function DashboardHeader({
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm transition-colors duration-300">
-      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary rounded-lg">
-              <BarChart3 size={24} className="text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                FinBoard
-              </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                Customizable Finance Dashboard
-              </p>
-            </div>
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="p-2 bg-primary rounded-lg">
+            <BarChart3 size={24} className="text-primary-foreground" />
           </div>
-
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-2 bg-transparent">
-                  <span className="truncate max-w-[150px]">
-                    {currentDashboard?.name}
-                  </span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                {dashboards.map((dashboard) => (
-                  <DropdownMenuItem
-                    key={dashboard.id}
-                    onClick={() => switchDashboard(dashboard.id)}
-                    className="flex items-center justify-between"
-                  >
-                    <span>{dashboard.name}</span>
-                    {dashboard.id === currentDashboardId && (
-                      <span className="text-primary">✓</span>
-                    )}
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => setShowNewDashboardInput(true)}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Dashboard
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={handleDeleteDashboard}
-              disabled={isDefaultDashboard}
-              title={
-                isDefaultDashboard
-                  ? "Cannot delete default dashboard"
-                  : "Delete current dashboard"
-              }
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Delete Dashboard</span>
-            </Button>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">
+              FinBoard
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Customizable Finance Dashboard
+            </p>
           </div>
         </div>
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-4">
-          <div className="flex-1 max-w-xs flex items-center gap-2 px-3 py-2 bg-input border border-border rounded-lg">
+        <div className="flex flex-1 items-center gap-2 flex-wrap justify-end">
+          <div className="flex-1 min-w-[200px] max-w-sm flex items-center gap-2 px-3 py-2 bg-input border border-border rounded-lg">
             <svg
               className="w-4 h-4 text-muted-foreground"
               fill="none"
@@ -215,8 +164,36 @@ export default function DashboardHeader({
               className="flex-1 bg-transparent text-foreground placeholder-muted-foreground focus:outline-none text-sm"
             />
           </div>
-
-          <div className="flex gap-2 flex-wrap">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2 bg-transparent">
+                <span className="truncate max-w-[120px]">
+                  {currentDashboard?.name}
+                </span>
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              {dashboards.map((dashboard) => (
+                <DropdownMenuItem
+                  key={dashboard.id}
+                  onClick={() => switchDashboard(dashboard.id)}
+                  className="flex items-center justify-between"
+                >
+                  <span>{dashboard.name}</span>
+                  {dashboard.id === currentDashboardId && (
+                    <span className="text-primary">✓</span>
+                  )}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setShowNewDashboardInput(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                New Dashboard
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="flex gap-1 flex-wrap">
             <Button
               variant="outline"
               size="icon"
@@ -229,22 +206,12 @@ export default function DashboardHeader({
                 <Moon className="h-4 w-4" />
               )}
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExport}
-              title="Export dashboard configuration"
-            >
-              <Download className="h-4 w-4 mr-2" />
+            <Button variant="outline" size="sm" onClick={handleExport}>
+              <Download className="h-4 w-4 mr-1" />
               <span className="hidden sm:inline">Export</span>
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleImport}
-              title="Import dashboard configuration"
-            >
-              <Upload className="h-4 w-4 mr-2" />
+            <Button variant="outline" size="sm" onClick={handleImport}>
+              <Upload className="h-4 w-4 mr-1" />
               <span className="hidden sm:inline">Import</span>
             </Button>
             <Button
@@ -252,58 +219,64 @@ export default function DashboardHeader({
               size="sm"
               onClick={handleDeleteAllWidgets}
               disabled={widgets.length === 0}
-              title="Delete all widgets"
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              <Trash2 className="h-4 w-4 mr-1" />
               <span className="hidden sm:inline">Delete All</span>
             </Button>
-            <Button size="sm" onClick={onAddWidget} title="Add new widget">
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Add Widget</span>
+            <Button size="sm" onClick={onAddWidget}>
+              <Plus className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">Add</span>
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDeleteDashboard}
+              disabled={isDefaultDashboard}
+              title={
+                isDefaultDashboard
+                  ? "Cannot delete default dashboard"
+                  : "Delete current dashboard"
+              }
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
             </Button>
           </div>
         </div>
-
         {showNewDashboardInput && (
-          <div className="flex flex-col gap-3 mt-4 p-4 bg-muted/50 rounded-lg border border-border">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="text"
-                placeholder="Dashboard name..."
-                value={newDashboardName}
-                onChange={(e) => setNewDashboardName(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleCreateDashboard()}
-                className="flex-1 px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-                autoFocus
-              />
-              <select
-                value={newDashboardTheme}
-                onChange={(e) =>
-                  setNewDashboardTheme(e.target.value as "light" | "dark")
-                }
-                className="px-3 py-2 bg-input border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-              >
-                <option value="dark">Dark Mode</option>
-                <option value="light">Light Mode</option>
-              </select>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                onClick={handleCreateDashboard}
-                className="flex-1"
-              >
-                Create
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setShowNewDashboardInput(false)}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-2 mt-2 p-3 bg-muted/50 rounded-lg border border-border w-full sm:w-auto flex-wrap">
+            <input
+              type="text"
+              placeholder="Dashboard name..."
+              value={newDashboardName}
+              onChange={(e) => setNewDashboardName(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleCreateDashboard()}
+              className="px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm flex-1 min-w-[150px]"
+            />
+            <select
+              value={newDashboardTheme}
+              onChange={(e) =>
+                setNewDashboardTheme(e.target.value as "light" | "dark")
+              }
+              className="px-3 py-2 bg-input border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+            >
+              <option value="dark">Dark Mode</option>
+              <option value="light">Light Mode</option>
+            </select>
+            <Button
+              size="sm"
+              onClick={handleCreateDashboard}
+              className="flex-1"
+            >
+              Create
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setShowNewDashboardInput(false)}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
           </div>
         )}
       </div>
