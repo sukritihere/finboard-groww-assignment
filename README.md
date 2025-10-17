@@ -85,7 +85,7 @@ A modern, professional finance dashboard builder that allows users to create cus
 1. Clone the repository:
    \`\`\`bash
    git clone <repository-url>
-   cd finboard
+   cd finboard-groww-assignment
    \`\`\`
 
 2. Install dependencies:
